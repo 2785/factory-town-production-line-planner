@@ -1,1 +1,5 @@
-import * as functions from "firebase-functions";
+import { server } from "./apollo/server";
+
+server.listen().then(({ url }) => {
+  console.log(`ready at ${url}`);
+});
