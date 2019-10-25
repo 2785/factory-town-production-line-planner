@@ -1,12 +1,6 @@
 import { typeDefs } from "./schemas/baseSchema";
 import { ApolloServer } from "apollo-server";
-import {
-    MutationAddProductArgs,
-    MutationAddSpecialFacilityArgs,
-    Resolvers,
-    ProductionLineResponse,
-    Role
-} from "./generated/types";
+import { Resolvers, ProductionLineResponse, Role } from "./generated/types";
 import { AuthDirective } from "./directives/authDirective";
 
 const resolvers: Resolvers = {
@@ -25,12 +19,6 @@ const resolvers: Resolvers = {
         }
     }
 };
-
-// const schema = makeExecutableSchema({
-//     typeDefs,
-//     resolvers,
-//     directiveResolvers
-// });
 
 export const server = new ApolloServer({
     typeDefs,

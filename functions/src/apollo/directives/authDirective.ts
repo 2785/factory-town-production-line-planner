@@ -1,11 +1,6 @@
 import { SchemaDirectiveVisitor } from "apollo-server";
-import {
-    GraphQLObjectType,
-    defaultFieldResolver,
-    GraphQLField,
-    GraphQLFieldMap
-} from "graphql";
-import { Role, AuthDirectiveResolver } from "../generated/types";
+import { GraphQLObjectType, defaultFieldResolver, GraphQLField } from "graphql";
+import { Role } from "../generated/types";
 import { ApolloServerContext } from "../server";
 
 interface GqlObjectTypeWithAuthWrapper extends GraphQLObjectType {
