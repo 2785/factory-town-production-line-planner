@@ -1,7 +1,8 @@
 import { typeDefs } from "./schemas/baseSchema";
-import { ApolloServer } from "apollo-server";
+import { ApolloServer } from "apollo-server-express";
 import { Resolvers, ProductionLineResponse, Role } from "./generated/types";
 import { AuthDirective } from "./directives/authDirective";
+import * as express from "express";
 
 const resolvers: Resolvers = {
     Query: {
@@ -20,15 +21,22 @@ const resolvers: Resolvers = {
     }
 };
 
-export const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    schemaDirectives: { auth: AuthDirective },
-    context: async ({ req }) => {
-        // console.log(req);
-        return { user: await getUser(req.headers.authToken) };
-    }
-});
+export function generateApolloServer() {
+    const app = express();
+
+    const server = new ApolloServer({
+        typeDefs,
+        resolvers,
+        schemaDirectives: { auth: AuthDirective },
+        context: async ({ req }) => {
+            // console.log(req);
+            return { user: await getUser(req.headers.authToken) };
+        }
+    });
+
+    server.applyMiddleware({ app, path: "/", cors: true });
+    return app;
+}
 
 async function getUser(authToken?: string): Promise<User> {
     return new User(authToken);

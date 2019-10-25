@@ -1,5 +1,10 @@
-import { server } from "./apollo/server";
+import { generateApolloServer } from "./apollo/server";
+import * as functions from "firebase-functions";
+import { Request, Response } from "express";
 
-server.listen().then(({ url }) => {
-    console.log(`ready at ${url}`);
-});
+const server = generateApolloServer();
+// server.listen().then(({ url }) => {
+//     console.log(`ready at ${url}`);
+// });
+
+export const apolloServer = functions.https.onRequest(generateApolloServer());
