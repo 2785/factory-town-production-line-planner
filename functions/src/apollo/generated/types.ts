@@ -10,6 +10,7 @@ export type Scalars = {
   Float: number,
 };
 
+
 export type EndProductSpec = {
   product: Product,
   count?: Maybe<Scalars['Int']>,
@@ -222,6 +223,12 @@ export type QueryGetProductionLineArgs = {
   requirement?: Maybe<EndProductSpec>
 };
 
+export enum Role {
+  Admin = 'ADMIN',
+  User = 'USER',
+  Contributor = 'CONTRIBUTOR'
+}
+
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -306,6 +313,7 @@ export type ResolversTypes = {
   Float: ResolverTypeWrapper<Scalars['Float']>,
   Ingredient: Ingredient,
   String: ResolverTypeWrapper<Scalars['String']>,
+  Role: Role,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -323,7 +331,10 @@ export type ResolversParentTypes = {
   Float: Scalars['Float'],
   Ingredient: Ingredient,
   String: Scalars['String'],
+  Role: Role,
 };
+
+export type AuthDirectiveResolver<Result, Parent, ContextType = any, Args = {   requires?: Maybe<Maybe<Role>> }> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type FacilityWorkerCountResolvers<ContextType = any, ParentType extends ResolversParentTypes['FacilityWorkerCount'] = ResolversParentTypes['FacilityWorkerCount']> = {
   facilityNumber?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
@@ -364,3 +375,13 @@ export type Resolvers<ContextType = any> = {
  * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
 */
 export type IResolvers<ContextType = any> = Resolvers<ContextType>;
+export type DirectiveResolvers<ContextType = any> = {
+  auth?: AuthDirectiveResolver<any, any, ContextType>,
+};
+
+
+/**
+* @deprecated
+* Use "DirectiveResolvers" root object instead. If you wish to get "IDirectiveResolvers", add "typesPrefix: I" to your config.
+*/
+export type IDirectiveResolvers<ContextType = any> = DirectiveResolvers<ContextType>;

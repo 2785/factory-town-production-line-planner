@@ -1,36 +1,36 @@
 {
-  "name": "functions",
-  "scripts": {
-    "lint": "tslint --project tsconfig.json",
-    "build": "tsc",
-    "serve": "npm run build && firebase serve --only functions",
-    "shell": "npm run build && firebase functions:shell",
-    "start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log",
-    "gql-codegen": "graphql-codegen --config codegen.yml",
-    "test": "ts-node src/index.ts"
-  },
-  "engines": {
-    "node": "8"
-  },
-  "main": "lib/index.js",
-  "dependencies": {
-    "apollo-server": "^2.9.7",
-    "firebase-admin": "^8.0.0",
-    "firebase-functions": "^3.1.0",
-    "graphql": "^14.5.8",
-    "graphql-tag": "^2.10.1",
-    "graphql-tools": "^4.0.6"
-  },
-  "devDependencies": {
-    "@graphql-codegen/cli": "^1.8.2",
-    "@graphql-codegen/introspection": "1.8.2",
-    "@graphql-codegen/typescript": "1.8.2",
-    "@graphql-codegen/typescript-resolvers": "1.8.2",
-    "graphql-typescript-definitions": "^0.18.0",
-    "tslint": "^5.12.0",
-    "typescript": "^3.6.4"
-  },
-  "private": true
+    "name": "functions",
+    "scripts": {
+        "lint": "tslint --project tsconfig.json",
+        "build": "npm run gql-codegen && tsc",
+        "serve": "npm run build && firebase serve --only functions",
+        "shell": "npm run build && firebase functions:shell",
+        "start": "npm run shell",
+        "deploy": "firebase deploy --only functions",
+        "logs": "firebase functions:log",
+        "gql-codegen": "graphql-codegen --config codegen.yml",
+        "test": "npm run build && ts-node src/index.ts"
+    },
+    "engines": {
+        "node": "8"
+    },
+    "main": "lib/index.js",
+    "dependencies": {
+        "@types/graphql": "^14.5.0",
+        "apollo-server": "^2.9.7",
+        "firebase-admin": "^8.0.0",
+        "firebase-functions": "^3.1.0",
+        "graphql": "^14.5.8",
+        "graphql-tag": "^2.10.1"
+    },
+    "devDependencies": {
+        "@graphql-codegen/cli": "^1.8.2",
+        "@graphql-codegen/introspection": "1.8.2",
+        "@graphql-codegen/typescript": "1.8.2",
+        "@graphql-codegen/typescript-resolvers": "1.8.2",
+        "graphql-typescript-definitions": "^0.18.0",
+        "tslint": "^5.12.0",
+        "typescript": "^3.6.4"
+    },
+    "private": true
 }

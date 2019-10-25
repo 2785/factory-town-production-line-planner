@@ -1,206 +1,214 @@
 import { gql } from "apollo-server";
 
 export const typeDefs = gql`
-  schema {
-    query: Query
-    mutation: Mutation
-  }
+    directive @auth(requires: Role = ADMIN) on OBJECT | FIELD_DEFINITION
 
-  type Query {
-    getProductionLine(requirement: EndProductSpec): ProductionLineResponse!
-  }
+    enum Role {
+        ADMIN
+        USER
+        CONTRIBUTOR
+    }
 
-  type ProductionLineResponse {
-    productionSteps: [ProductionStep]!
-  }
+    schema {
+        query: Query
+        mutation: Mutation
+    }
 
-  type Mutation {
-    addProduct(
-      name: Product!
-      baseProduct: Boolean!
-      productionCount: Float! = 1
-      productionTime: Float!
-      ingredients: [Ingredient] = []
-    ): Boolean!
-    addSpecialFacility(
-      name: Facility!
-      workerCap: Int = 5
-      innateBooster: Float = 0
-    ): Boolean
-  }
+    type Query {
+        getProductionLine(requirement: EndProductSpec): ProductionLineResponse!
+    }
 
-  input EndProductSpec {
-    product: Product!
-    count: Int = 0
-  }
+    type ProductionLineResponse {
+        productionSteps: [ProductionStep]!
+    }
 
-  type ProductionStep {
-    facility: Facility!
-    product: Product!
-    facilityCount: Int!
-    workerCount: [FacilityWorkerCount!]!
-  }
+    type Mutation {
+        addProduct(
+            name: Product!
+            baseProduct: Boolean!
+            productionCount: Float! = 1
+            productionTime: Float!
+            ingredients: [Ingredient] = []
+        ): Boolean! @auth(requires: ADMIN)
+        addSpecialFacility(
+            name: Facility!
+            workerCap: Int = 5
+            innateBooster: Float = 0
+        ): Boolean
+    }
 
-  type FacilityWorkerCount {
-    facilityNumber: Int
-    workerCount: Int
-  }
+    input EndProductSpec {
+        product: Product!
+        count: Int = 0
+    }
 
-  input Ingredient {
-    product: Product!
-    count: Float!
-  }
+    type ProductionStep {
+        facility: Facility!
+        product: Product!
+        facilityCount: Int!
+        workerCount: [FacilityWorkerCount!]!
+    }
 
-  # names.graphql
+    type FacilityWorkerCount {
+        facilityNumber: Int
+        workerCount: Int
+    }
 
-  enum Product {
-    NAILS
-    FISH
-    BEEF
-    RAWCHICKEN
-    EGG
-    MILK
-    FRUIT
-    SUGAR
-    GRAIN
-    HERB
-    TOMATO
-    BERRIES
-    CARROT
-    COTTON
-    POTATO
-    WOOD
-    PEAR
-    APPLE
-    COAL
-    STONE
-    IRONORE
-    FLOUR
-    ANIMALFEED
-    PLANKS
-    PAPER
-    STONEBRICK
-    IRONPLATE
-    REMEDY
-    FERTILIZER
-    WOOL
-    LEATHER
-    WOODWHEEL
-    HEALTHPOTION
-    IRONWHEEL
-    GEAR
-    STEAMPIPE
-    BREAD
-    CLOTH
-    BOOK
-    CLOTHCONVEYORBELT
-    BERRYCAKE
-    COOKEDFISH
-    COOKEDBEEF
-    FISHOIL
-    BUTTER
-    COOKEDCHICKEN
-    OINTMENT
-    ANTIDOTE
-    FRUITJUICE
-    JAM
-    CHEESE
-    VEGGIESTEW
-    FISHSTEW
-    MEATSTEW
-    SANDWICH
-    APPLEPIE
-    CAKE
-    PROTEINSHAKE
-    POLISHEDSTONE
-    SHIRT
-    CLOAT
-    WARMCOAT
-    REINFORCEDPLANKS
-    SHOE
-    WOODAXE
-    PICKAXE
-    BANDAGE
-    POULTICE
-    MEDICALWRAP
-    RAILTILE
-    METALCONVEYORBELT
-    GOLDORE
-    MANACRYSTAL
-    EARTHCRYSTAL
-    AIRCRYSTAL
-    FIRECRYSTAL
-    WATERCRYSTAL
-    EARTHETHER
-    FIREETHER
-    WATERETHER
-    AIRETHER
-    OMNISTONE
-    CROWN
-    NECKLACE
-    GOLDINGOT
-    ENCHANTEDBOOK
-    MAGICCLOAK
-    MAGICROBE
-    FIRERING
-    WATERRING
-    ELIXIR
-    STRENGTHSPELLBOOK
-    STAMINASPELLBOOK
-    CURESPELLBOOK
-    PROTECTIONSPELLBOOK
-    EARTHSTONE
-    AIRSTONE
-    WATERSTONE
-    FIRESTONE
-    MANASHARD
-    OMNIPIPE
-    MANAPIPE
-    MAGICRAIL
-    MAGICCONVEYORBELT
-  }
+    input Ingredient {
+        product: Product!
+        count: Float!
+    }
 
-  enum Facility {
-    WORKER
-    WARD
-    AIRTEMPLE
-    APOTHECARY
-    BARN
-    CRATE
-    EARTHSHRINE
-    EARTHTEMPLE
-    ELEMENTALREFINERY
-    ENCHANTER
-    FARM
-    FIRESHRINE
-    FIRETEMPLE
-    FOODMARKET
-    FORESTER
-    FORGE
-    GENERALSTORE
-    GRAINMILL
-    HOUSE
-    KITCHEN
-    LUMBERMILL
-    MACHINESHOP
-    MAGICFORGE
-    MANAREACTOR
-    MANARECEIVER
-    MANATRANSMITTER
-    MINE
-    OMNITEMPLE
-    PACKAGER
-    PASTURE
-    RECHARGER
-    SCHOOL
-    SILO
-    SPECIALITYGOODS
-    STEAMGENERATOR
-    STONEMASON
-    VOIDOBELISK
-    WATERSHRINE
-    WATERTEMPLE
-    WELL
-    WORKSHOP
-  }
+    # names.graphql
+
+    enum Product {
+        NAILS
+        FISH
+        BEEF
+        RAWCHICKEN
+        EGG
+        MILK
+        FRUIT
+        SUGAR
+        GRAIN
+        HERB
+        TOMATO
+        BERRIES
+        CARROT
+        COTTON
+        POTATO
+        WOOD
+        PEAR
+        APPLE
+        COAL
+        STONE
+        IRONORE
+        FLOUR
+        ANIMALFEED
+        PLANKS
+        PAPER
+        STONEBRICK
+        IRONPLATE
+        REMEDY
+        FERTILIZER
+        WOOL
+        LEATHER
+        WOODWHEEL
+        HEALTHPOTION
+        IRONWHEEL
+        GEAR
+        STEAMPIPE
+        BREAD
+        CLOTH
+        BOOK
+        CLOTHCONVEYORBELT
+        BERRYCAKE
+        COOKEDFISH
+        COOKEDBEEF
+        FISHOIL
+        BUTTER
+        COOKEDCHICKEN
+        OINTMENT
+        ANTIDOTE
+        FRUITJUICE
+        JAM
+        CHEESE
+        VEGGIESTEW
+        FISHSTEW
+        MEATSTEW
+        SANDWICH
+        APPLEPIE
+        CAKE
+        PROTEINSHAKE
+        POLISHEDSTONE
+        SHIRT
+        CLOAT
+        WARMCOAT
+        REINFORCEDPLANKS
+        SHOE
+        WOODAXE
+        PICKAXE
+        BANDAGE
+        POULTICE
+        MEDICALWRAP
+        RAILTILE
+        METALCONVEYORBELT
+        GOLDORE
+        MANACRYSTAL
+        EARTHCRYSTAL
+        AIRCRYSTAL
+        FIRECRYSTAL
+        WATERCRYSTAL
+        EARTHETHER
+        FIREETHER
+        WATERETHER
+        AIRETHER
+        OMNISTONE
+        CROWN
+        NECKLACE
+        GOLDINGOT
+        ENCHANTEDBOOK
+        MAGICCLOAK
+        MAGICROBE
+        FIRERING
+        WATERRING
+        ELIXIR
+        STRENGTHSPELLBOOK
+        STAMINASPELLBOOK
+        CURESPELLBOOK
+        PROTECTIONSPELLBOOK
+        EARTHSTONE
+        AIRSTONE
+        WATERSTONE
+        FIRESTONE
+        MANASHARD
+        OMNIPIPE
+        MANAPIPE
+        MAGICRAIL
+        MAGICCONVEYORBELT
+    }
+
+    enum Facility {
+        WORKER
+        WARD
+        AIRTEMPLE
+        APOTHECARY
+        BARN
+        CRATE
+        EARTHSHRINE
+        EARTHTEMPLE
+        ELEMENTALREFINERY
+        ENCHANTER
+        FARM
+        FIRESHRINE
+        FIRETEMPLE
+        FOODMARKET
+        FORESTER
+        FORGE
+        GENERALSTORE
+        GRAINMILL
+        HOUSE
+        KITCHEN
+        LUMBERMILL
+        MACHINESHOP
+        MAGICFORGE
+        MANAREACTOR
+        MANARECEIVER
+        MANATRANSMITTER
+        MINE
+        OMNITEMPLE
+        PACKAGER
+        PASTURE
+        RECHARGER
+        SCHOOL
+        SILO
+        SPECIALITYGOODS
+        STEAMGENERATOR
+        STONEMASON
+        VOIDOBELISK
+        WATERSHRINE
+        WATERTEMPLE
+        WELL
+        WORKSHOP
+    }
 `;
