@@ -29,13 +29,14 @@ export async function generateApolloServer() {
         resolvers,
         schemaDirectives: { auth: AuthDirective },
         context: async ({ req }): Promise<ApolloServerContext> => {
+            console.log("Generating Context...");
             return {
-                user: req.headers.authToken
-                    ? await userDataSource.getUser(req.headers.authToken)
-                    : null,
+                user: await userDataSource.getUser(req.headers.authToken),
                 recipeDataSource: productRecipeDataSource
             };
-        }
+        },
+        introspection: true,
+        playground: true
     });
 
     server.applyMiddleware({ app, path: "/", cors: true });
