@@ -4,6 +4,6 @@ export interface IDatabaseEngine {
     addByPath<T>(path: string, data: T): Promise<DatabaseWriteResponse>;
 }
 
-interface DatabaseWriteResponse {
+export interface DatabaseWriteResponse {
     timeStamp: number;
 }

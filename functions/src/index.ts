@@ -7,4 +7,7 @@ const server = generateApolloServer();
 //     console.log(`ready at ${url}`);
 // });
 
-export const apolloServer = functions.https.onRequest(generateApolloServer());
+export const apolloServer = functions.https.onRequest(async (req, res) => {
+    const app = await generateApolloServer();
+    return app(req, res);
+});

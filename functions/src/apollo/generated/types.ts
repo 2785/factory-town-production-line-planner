@@ -60,6 +60,13 @@ export enum Facility {
   Workshop = 'WORKSHOP'
 }
 
+export type FacilitySpec = {
+   __typename?: 'FacilitySpec',
+  name: Facility,
+  workerCap?: Maybe<Scalars['Int']>,
+  innateBooster?: Maybe<Scalars['Float']>,
+};
+
 export type FacilityWorkerCount = {
    __typename?: 'FacilityWorkerCount',
   facilityNumber?: Maybe<Scalars['Int']>,
@@ -67,6 +74,12 @@ export type FacilityWorkerCount = {
 };
 
 export type Ingredient = {
+   __typename?: 'Ingredient',
+  product: Product,
+  count: Scalars['Float'],
+};
+
+export type IngredientInput = {
   product: Product,
   count: Scalars['Float'],
 };
@@ -83,7 +96,7 @@ export type MutationAddProductArgs = {
   baseProduct: Scalars['Boolean'],
   productionCount?: Scalars['Float'],
   productionTime: Scalars['Float'],
-  ingredients?: Maybe<Array<Maybe<Ingredient>>>
+  ingredients?: Maybe<Array<Maybe<IngredientInput>>>
 };
 
 
@@ -213,8 +226,18 @@ export type ProductionStep = {
   workerCount: Array<FacilityWorkerCount>,
 };
 
+export type ProductSpec = {
+   __typename?: 'ProductSpec',
+  name: Product,
+  baseProduct: Scalars['Boolean'],
+  productionCount: Scalars['Float'],
+  productionTime: Scalars['Float'],
+  ingredients?: Maybe<Array<Maybe<Ingredient>>>,
+};
+
 export type Query = {
    __typename?: 'Query',
+  hello: Scalars['String'],
   getProductionLine: ProductionLineResponse,
 };
 
@@ -301,6 +324,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>,
+  String: ResolverTypeWrapper<Scalars['String']>,
   EndProductSpec: EndProductSpec,
   Product: Product,
   Int: ResolverTypeWrapper<Scalars['Int']>,
@@ -311,14 +335,17 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   Float: ResolverTypeWrapper<Scalars['Float']>,
-  Ingredient: Ingredient,
-  String: ResolverTypeWrapper<Scalars['String']>,
+  IngredientInput: IngredientInput,
   Role: Role,
+  ProductSpec: ResolverTypeWrapper<ProductSpec>,
+  Ingredient: ResolverTypeWrapper<Ingredient>,
+  FacilitySpec: ResolverTypeWrapper<FacilitySpec>,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Query: {},
+  String: Scalars['String'],
   EndProductSpec: EndProductSpec,
   Product: Product,
   Int: Scalars['Int'],
@@ -329,16 +356,29 @@ export type ResolversParentTypes = {
   Mutation: {},
   Boolean: Scalars['Boolean'],
   Float: Scalars['Float'],
-  Ingredient: Ingredient,
-  String: Scalars['String'],
+  IngredientInput: IngredientInput,
   Role: Role,
+  ProductSpec: ProductSpec,
+  Ingredient: Ingredient,
+  FacilitySpec: FacilitySpec,
 };
 
 export type AuthDirectiveResolver<Result, Parent, ContextType = any, Args = {   requires?: Maybe<Maybe<Role>> }> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
+export type FacilitySpecResolvers<ContextType = any, ParentType extends ResolversParentTypes['FacilitySpec'] = ResolversParentTypes['FacilitySpec']> = {
+  name?: Resolver<ResolversTypes['Facility'], ParentType, ContextType>,
+  workerCap?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  innateBooster?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>,
+};
+
 export type FacilityWorkerCountResolvers<ContextType = any, ParentType extends ResolversParentTypes['FacilityWorkerCount'] = ResolversParentTypes['FacilityWorkerCount']> = {
   facilityNumber?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   workerCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+};
+
+export type IngredientResolvers<ContextType = any, ParentType extends ResolversParentTypes['Ingredient'] = ResolversParentTypes['Ingredient']> = {
+  product?: Resolver<ResolversTypes['Product'], ParentType, ContextType>,
+  count?: Resolver<ResolversTypes['Float'], ParentType, ContextType>,
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
@@ -357,15 +397,27 @@ export type ProductionStepResolvers<ContextType = any, ParentType extends Resolv
   workerCount?: Resolver<Array<ResolversTypes['FacilityWorkerCount']>, ParentType, ContextType>,
 };
 
+export type ProductSpecResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProductSpec'] = ResolversParentTypes['ProductSpec']> = {
+  name?: Resolver<ResolversTypes['Product'], ParentType, ContextType>,
+  baseProduct?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  productionCount?: Resolver<ResolversTypes['Float'], ParentType, ContextType>,
+  productionTime?: Resolver<ResolversTypes['Float'], ParentType, ContextType>,
+  ingredients?: Resolver<Maybe<Array<Maybe<ResolversTypes['Ingredient']>>>, ParentType, ContextType>,
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  hello?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   getProductionLine?: Resolver<ResolversTypes['ProductionLineResponse'], ParentType, ContextType, QueryGetProductionLineArgs>,
 };
 
 export type Resolvers<ContextType = any> = {
+  FacilitySpec?: FacilitySpecResolvers<ContextType>,
   FacilityWorkerCount?: FacilityWorkerCountResolvers<ContextType>,
+  Ingredient?: IngredientResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   ProductionLineResponse?: ProductionLineResponseResolvers<ContextType>,
   ProductionStep?: ProductionStepResolvers<ContextType>,
+  ProductSpec?: ProductSpecResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
 };
 

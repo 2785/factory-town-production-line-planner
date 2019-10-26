@@ -15,6 +15,7 @@ export const typeDefs = gql`
     }
 
     type Query {
+        hello: String!
         getProductionLine(requirement: EndProductSpec): ProductionLineResponse!
     }
 
@@ -28,13 +29,27 @@ export const typeDefs = gql`
             baseProduct: Boolean!
             productionCount: Float! = 1
             productionTime: Float!
-            ingredients: [Ingredient] = []
+            ingredients: [IngredientInput] = []
         ): Boolean! @auth(requires: ADMIN)
         addSpecialFacility(
             name: Facility!
             workerCap: Int = 5
             innateBooster: Float = 0
         ): Boolean
+    }
+
+    type ProductSpec {
+        name: Product!
+        baseProduct: Boolean!
+        productionCount: Float!
+        productionTime: Float!
+        ingredients: [Ingredient]
+    }
+
+    type FacilitySpec {
+        name: Facility!
+        workerCap: Int
+        innateBooster: Float
     }
 
     input EndProductSpec {
@@ -54,7 +69,12 @@ export const typeDefs = gql`
         workerCount: Int
     }
 
-    input Ingredient {
+    input IngredientInput {
+        product: Product!
+        count: Float!
+    }
+
+    type Ingredient {
         product: Product!
         count: Float!
     }

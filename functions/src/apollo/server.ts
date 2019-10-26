@@ -3,34 +3,38 @@ import { ApolloServer } from "apollo-server-express";
 import { Resolvers, ProductionLineResponse, Role } from "./generated/types";
 import { AuthDirective } from "./directives/authDirective";
 import * as express from "express";
+import { merge } from "lodash";
+import { User } from "../utilities/user";
+import { getDataSources, Database } from "../dataSources/getDataSources";
+import { ProductRecipeDataSource } from "../dataSources/productRecipeDataSource";
+import { productionLinePlannerResolver } from "./resolvers/productionLinePlannerResolver";
 
-const resolvers: Resolvers = {
+const baseResolver: Resolvers = {
     Query: {
-        getProductionLine: (obj, args, context, info) => {
-            const res: ProductionLineResponse = { productionSteps: [] };
-            return Promise.resolve(res);
-        }
-    },
-    Mutation: {
-        addProduct: (obj, args, context, info): boolean => {
-            return false;
-        },
-        addSpecialFacility: (obj, args, context, info): boolean => {
-            return false;
-        }
+        hello: () => Promise.resolve("Hello!")
     }
 };
 
-export function generateApolloServer() {
+const resolvers: Resolvers = merge(baseResolver, productionLinePlannerResolver);
+
+export async function generateApolloServer() {
     const app = express();
+
+    const { productRecipeDataSource, userDataSource } = await getDataSources(
+        Database.FIRESTORE
+    );
 
     const server = new ApolloServer({
         typeDefs,
         resolvers,
         schemaDirectives: { auth: AuthDirective },
-        context: async ({ req }) => {
-            // console.log(req);
-            return { user: await getUser(req.headers.authToken) };
+        context: async ({ req }): Promise<ApolloServerContext> => {
+            return {
+                user: req.headers.authToken
+                    ? await userDataSource.getUser(req.headers.authToken)
+                    : null,
+                recipeDataSource: productRecipeDataSource
+            };
         }
     });
 
@@ -38,24 +42,7 @@ export function generateApolloServer() {
     return app;
 }
 
-async function getUser(authToken?: string): Promise<User> {
-    return new User(authToken);
-}
-
-class User {
-    constructor(authToken?) {
-        this.roles = authToken
-            ? authToken == "carrot"
-                ? [Role.Admin]
-                : [Role.User]
-            : [Role.User];
-    }
-    private roles: Role[];
-    public hasRole(role: Role): boolean {
-        return this.roles.includes(role);
-    }
-}
-
 export interface ApolloServerContext {
     user: User;
+    recipeDataSource: ProductRecipeDataSource;
 }
