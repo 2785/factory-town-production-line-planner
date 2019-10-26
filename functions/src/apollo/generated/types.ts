@@ -93,6 +93,7 @@ export type Mutation = {
 
 export type MutationAddProductArgs = {
   name: Product,
+  facility: Facility,
   baseProduct: Scalars['Boolean'],
   productionCount?: Scalars['Float'],
   productionTime: Scalars['Float'],
@@ -229,6 +230,7 @@ export type ProductionStep = {
 export type ProductSpec = {
    __typename?: 'ProductSpec',
   name: Product,
+  facility: Facility,
   baseProduct: Scalars['Boolean'],
   productionCount: Scalars['Float'],
   productionTime: Scalars['Float'],
@@ -382,7 +384,7 @@ export type IngredientResolvers<ContextType = any, ParentType extends ResolversP
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  addProduct?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationAddProductArgs, 'name' | 'baseProduct' | 'productionCount' | 'productionTime' | 'ingredients'>>,
+  addProduct?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationAddProductArgs, 'name' | 'facility' | 'baseProduct' | 'productionCount' | 'productionTime' | 'ingredients'>>,
   addSpecialFacility?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddSpecialFacilityArgs, 'name' | 'workerCap' | 'innateBooster'>>,
 };
 
@@ -399,6 +401,7 @@ export type ProductionStepResolvers<ContextType = any, ParentType extends Resolv
 
 export type ProductSpecResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProductSpec'] = ResolversParentTypes['ProductSpec']> = {
   name?: Resolver<ResolversTypes['Product'], ParentType, ContextType>,
+  facility?: Resolver<ResolversTypes['Facility'], ParentType, ContextType>,
   baseProduct?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   productionCount?: Resolver<ResolversTypes['Float'], ParentType, ContextType>,
   productionTime?: Resolver<ResolversTypes['Float'], ParentType, ContextType>,
