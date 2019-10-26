@@ -5,17 +5,13 @@ import { ProductionFacilityFactory } from "./models/productionFacilityFactory";
 export class ProductionLinePlannerService {
     private facilityFactory: ProductionFacilityFactory;
     constructor(private ds: ProductAndFacilityDataSource) {}
-    private async recursiveFulfillProduction(
+    private recursiveFulfillProduction(
         currentState: ProductionLineState
     ): Promise<ProductionLineState> {
-        const needToFulfill = Array.from(
-            currentState.fulfillment.values()
-        ).filter(item => !item.checkIfFulfilled());
-        if (needToFulfill.length == 0) {
-            return currentState;
-        } else {
-            return Promise.all(
-                needToFulfill.map(async itemToFulfill => {
+        return Promise.all(
+            Array.from(currentState.fulfillment.values())
+                .filter(item => !item.checkIfFulfilled())
+                .map(async itemToFulfill => {
                     const productSpec = await this.ds.getProductSpec(
                         itemToFulfill.item
                     );
@@ -51,7 +47,10 @@ export class ProductionLinePlannerService {
                         }
                     });
                 })
-            ).then(() => this.recursiveFulfillProduction(currentState));
-        }
+        ).then(voidArr =>
+            voidArr.length
+                ? this.recursiveFulfillProduction(currentState)
+                : currentState
+        );
     }
 }
