@@ -1,0 +1,7 @@
+{
+    "schemaPath": "./src/apollo/schemas/schema.graphql",
+    "includes": "./src/apollo/schemas/*/graphql", 
+    "extensions": {
+        "schemaTypesPath": "./src/apollo/types/graphql"
+    }
+}
