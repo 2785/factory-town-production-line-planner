@@ -10,11 +10,11 @@ const DEFAULT_WORKER_CAP = 5;
 export class ProductionFacilityFactory {
     constructor(private ds: ProductAndFacilityDataSource) {}
 
-    async getFacility(
+    public getFacility(
         prod: ProductSpec,
         qtyRequired: number
-    ): Promise<ProductionFacility> {
-        const facilityDetail = await this.ds.getFacilityDetailOrDefault(
+    ): ProductionFacility {
+        const facilityDetail = this.ds.getFacilityDetailOrDefault(
             prod.facility
         );
 

@@ -99,12 +99,14 @@ export class BaseProductionFacility implements ProductionFacility {
     }
 
     public getIngredients(): Ingredient[] {
-        return this.prod.ingredients.map(
-            x =>
-                <Ingredient>{
-                    product: x.product,
-                    count: x.count * this.actualProduction
-                }
-        );
+        return this.prod.ingredients
+            ? this.prod.ingredients.map(
+                  x =>
+                      <Ingredient>{
+                          product: x.product,
+                          count: x.count * this.actualProduction
+                      }
+              )
+            : [];
     }
 }
