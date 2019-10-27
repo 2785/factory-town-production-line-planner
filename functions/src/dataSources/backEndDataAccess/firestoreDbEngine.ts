@@ -5,12 +5,10 @@ import * as admin from "firebase-admin";
 export class FirestoreDbEngine implements IDatabaseEngine {
     private db: FirebaseFirestore.Firestore;
 
-    constructor() {
-        this.db = admin.firestore();
-    }
-
     async init(): Promise<FirestoreDbEngine> {
-        return initializeIfNotAlreadyInitialized().then(() => this);
+        await initializeIfNotAlreadyInitialized();
+        this.db = admin.firestore();
+        return this;
     }
 
     async getByPath<T>(path: string, suppressLog: boolean = false): Promise<T> {
