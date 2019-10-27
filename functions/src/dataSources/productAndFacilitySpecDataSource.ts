@@ -40,7 +40,7 @@ export class ProductAndFacilityDataSource {
     public getProductSpec(product: Product) {
         if (!this.productSpecs.has(product)) {
             throw new Error(
-                `Required Product ${product.toLocaleLowerCase} is not found in the database`
+                `Required Product ${product.toLocaleLowerCase()} is not found in the database`
             );
         } else {
             return this.productSpecs.get(product);
