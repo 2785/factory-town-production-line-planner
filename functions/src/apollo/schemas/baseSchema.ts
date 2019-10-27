@@ -26,6 +26,7 @@ export const typeDefs = gql`
     type Mutation {
         addProduct(
             name: Product!
+            facility: Facility!
             baseProduct: Boolean!
             productionCount: Float! = 1
             productionTime: Float!
@@ -40,6 +41,7 @@ export const typeDefs = gql`
 
     type ProductSpec {
         name: Product!
+        facility: Facility!
         baseProduct: Boolean!
         productionCount: Float!
         productionTime: Float!
@@ -54,7 +56,7 @@ export const typeDefs = gql`
 
     input EndProductSpec {
         product: Product!
-        count: Int = 0
+        count: Float = 0
     }
 
     type ProductionStep {
