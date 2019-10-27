@@ -15,7 +15,7 @@ export class ProductionLinePlannerService {
                     const productSpec = await this.ds.getProductSpec(
                         itemToFulfill.item
                     );
-                    const facility = this.facilityFactory.getFacility(
+                    const facility = await this.facilityFactory.getFacility(
                         productSpec,
                         itemToFulfill.getQtyToFulfill()
                     );
