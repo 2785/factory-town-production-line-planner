@@ -8,6 +8,7 @@ import { User } from "../utilities/user";
 import { getDataSources, Database } from "../dataSources/getDataSources";
 import { ProductAndFacilityDataSource } from "../dataSources/productAndFacilitySpecDataSource";
 import { productionLinePlannerResolver } from "./resolvers/productionLinePlannerResolver";
+import { UserDataSource } from "../dataSources/userDataSource";
 
 const baseResolver: Resolvers = {
     Query: {
@@ -32,8 +33,9 @@ export async function generateApolloServer() {
         context: async ({ req }): Promise<ApolloServerContext> => {
             console.log("Generating Context...");
             return {
-                user: await userDataSource.getUser(req.headers.authToken),
-                recipeDataSource: productAndFacilityDataSource
+                user: await userDataSource.getUser(req.headers.authtoken),
+                recipeDataSource: productAndFacilityDataSource,
+                userDataSource: userDataSource
             };
         },
         introspection: true,
@@ -47,4 +49,5 @@ export async function generateApolloServer() {
 export interface ApolloServerContext {
     user: User;
     recipeDataSource: ProductAndFacilityDataSource;
+    userDataSource: UserDataSource;
 }

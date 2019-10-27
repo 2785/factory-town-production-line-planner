@@ -6,7 +6,8 @@ export const productionLinePlannerResolver: Resolvers = {
     Query: {
         getProductionLine: (obj, args, context: ApolloServerContext, info) => {
             const serviceProvider = new ProductionLinePlannerService(
-                context.recipeDataSource
+                context.recipeDataSource,
+                context.user
             );
 
             const res: ProductionLineResponse = {
@@ -25,6 +26,27 @@ export const productionLinePlannerResolver: Resolvers = {
         },
         addSpecialFacility: (obj, args, context: ApolloServerContext, info) => {
             return Promise.resolve(false);
+        },
+        createUser: (obj, args, context: ApolloServerContext, info) => {
+            return context.userDataSource.createUser(args.id);
+        },
+        addFacilityBooster: (obj, args, context: ApolloServerContext, info) => {
+            return context.userDataSource.addFacilityBooster(
+                context.user,
+                args.facility,
+                args.booster
+            );
+        },
+        setWorldHappinessBooster: (
+            obj,
+            args,
+            context: ApolloServerContext,
+            info
+        ) => {
+            return context.userDataSource.updateHappinessBooster(
+                context.user,
+                args.booster
+            );
         }
     }
 };
