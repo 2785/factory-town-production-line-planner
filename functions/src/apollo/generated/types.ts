@@ -13,7 +13,7 @@ export type Scalars = {
 
 export type EndProductSpec = {
   product: Product,
-  count?: Maybe<Scalars['Int']>,
+  count?: Maybe<Scalars['Float']>,
 };
 
 export enum Facility {
@@ -329,14 +329,14 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>,
   EndProductSpec: EndProductSpec,
   Product: Product,
-  Int: ResolverTypeWrapper<Scalars['Int']>,
+  Float: ResolverTypeWrapper<Scalars['Float']>,
   ProductionLineResponse: ResolverTypeWrapper<ProductionLineResponse>,
   ProductionStep: ResolverTypeWrapper<ProductionStep>,
   Facility: Facility,
+  Int: ResolverTypeWrapper<Scalars['Int']>,
   FacilityWorkerCount: ResolverTypeWrapper<FacilityWorkerCount>,
   Mutation: ResolverTypeWrapper<{}>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
-  Float: ResolverTypeWrapper<Scalars['Float']>,
   IngredientInput: IngredientInput,
   Role: Role,
   ProductSpec: ResolverTypeWrapper<ProductSpec>,
@@ -350,14 +350,14 @@ export type ResolversParentTypes = {
   String: Scalars['String'],
   EndProductSpec: EndProductSpec,
   Product: Product,
-  Int: Scalars['Int'],
+  Float: Scalars['Float'],
   ProductionLineResponse: ProductionLineResponse,
   ProductionStep: ProductionStep,
   Facility: Facility,
+  Int: Scalars['Int'],
   FacilityWorkerCount: FacilityWorkerCount,
   Mutation: {},
   Boolean: Scalars['Boolean'],
-  Float: Scalars['Float'],
   IngredientInput: IngredientInput,
   Role: Role,
   ProductSpec: ProductSpec,
