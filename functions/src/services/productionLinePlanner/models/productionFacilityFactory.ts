@@ -1,14 +1,14 @@
 import { ProductAndFacilityDataSource } from "../../../dataSources/productAndFacilitySpecDataSource";
 import { ProductSpec } from "../../../apollo/generated/types";
-import {
-    ProductionFacility,
-    BaseProductionFacility
-} from "./baseProductionFacility";
+import { ProductionFacility } from "./baseProductionFacility";
+import { User } from "../../../utilities/user";
+import { GenericProductionFacility } from "./genericProductionFacility";
+import { ProductionFacilityWithBuiltInBooster } from "./productionFacilityWithBuiltInBooster";
 
 const DEFAULT_WORKER_CAP = 5;
 
 export class ProductionFacilityFactory {
-    constructor(private ds: ProductAndFacilityDataSource) {}
+    constructor(private ds: ProductAndFacilityDataSource, private user: User) {}
 
     public getFacility(
         prod: ProductSpec,
@@ -22,6 +22,22 @@ export class ProductionFacilityFactory {
             ? facilityDetail.workerCap
             : DEFAULT_WORKER_CAP;
 
-        return new BaseProductionFacility(workerCap, qtyRequired, prod);
+        const upgradedFacilities = this.user.getUpgradedFacilities();
+        if (upgradedFacilities.has(prod.facility)) {
+            return new ProductionFacilityWithBuiltInBooster(
+                workerCap,
+                qtyRequired,
+                prod,
+                this.user.getHappinessBooster(),
+                upgradedFacilities.get(prod.facility)
+            );
+        } else {
+            return new GenericProductionFacility(
+                workerCap,
+                qtyRequired,
+                prod,
+                this.user.getHappinessBooster()
+            );
+        }
     }
 }
