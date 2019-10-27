@@ -6,7 +6,7 @@ import * as express from "express";
 import { merge } from "lodash";
 import { User } from "../utilities/user";
 import { getDataSources, Database } from "../dataSources/getDataSources";
-import { ProductRecipeDataSource } from "../dataSources/productRecipeDataSource";
+import { ProductAndFacilityDataSource } from "../dataSources/productAndFacilitySpecDataSource";
 import { productionLinePlannerResolver } from "./resolvers/productionLinePlannerResolver";
 
 const baseResolver: Resolvers = {
@@ -20,9 +20,12 @@ const resolvers: Resolvers = merge(baseResolver, productionLinePlannerResolver);
 export async function generateApolloServer() {
     const app = express();
 
-    const { productRecipeDataSource, userDataSource } = await getDataSources(
-        Database.FIRESTORE
-    );
+    console.log(process.env.NODE_ENV);
+
+    const {
+        productAndFacilityDataSource,
+        userDataSource
+    } = await getDataSources(Database.FIRESTORE);
 
     const server = new ApolloServer({
         typeDefs,
@@ -30,9 +33,10 @@ export async function generateApolloServer() {
         schemaDirectives: { auth: AuthDirective },
         context: async ({ req }): Promise<ApolloServerContext> => {
             console.log("Generating Context...");
+            console.log("Node Env: ", process.env.NODE_ENV);
             return {
                 user: await userDataSource.getUser(req.headers.authToken),
-                recipeDataSource: productRecipeDataSource
+                recipeDataSource: productAndFacilityDataSource
             };
         },
         introspection: true,
@@ -45,5 +49,5 @@ export async function generateApolloServer() {
 
 export interface ApolloServerContext {
     user: User;
-    recipeDataSource: ProductRecipeDataSource;
+    recipeDataSource: ProductAndFacilityDataSource;
 }
