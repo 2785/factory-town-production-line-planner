@@ -56,7 +56,7 @@ export const typeDefs = gql`
 
     input EndProductSpec {
         product: Product!
-        count: Int = 0
+        count: Float = 0
     }
 
     type ProductionStep {
