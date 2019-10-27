@@ -20,8 +20,6 @@ const resolvers: Resolvers = merge(baseResolver, productionLinePlannerResolver);
 export async function generateApolloServer() {
     const app = express();
 
-    console.log(process.env.NODE_ENV);
-
     const {
         productAndFacilityDataSource,
         userDataSource
@@ -33,7 +31,6 @@ export async function generateApolloServer() {
         schemaDirectives: { auth: AuthDirective },
         context: async ({ req }): Promise<ApolloServerContext> => {
             console.log("Generating Context...");
-            console.log("Node Env: ", process.env.NODE_ENV);
             return {
                 user: await userDataSource.getUser(req.headers.authToken),
                 recipeDataSource: productAndFacilityDataSource
