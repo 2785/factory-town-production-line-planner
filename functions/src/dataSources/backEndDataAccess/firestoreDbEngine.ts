@@ -2,23 +2,28 @@ import { IDatabaseEngine, DatabaseWriteResponse } from "./iDataBaseEngine";
 import { initializeIfNotAlreadyInitialized } from "../../utilities/firebaseUtil";
 import * as admin from "firebase-admin";
 
-export class firestoreDbEngine implements IDatabaseEngine {
+export class FirestoreDbEngine implements IDatabaseEngine {
     private db: FirebaseFirestore.Firestore;
 
     constructor() {
-        initializeIfNotAlreadyInitialized();
         this.db = admin.firestore();
     }
 
-    async getByPath<T>(path: string): Promise<T> {
+    async init(): Promise<FirestoreDbEngine> {
+        return initializeIfNotAlreadyInitialized().then(() => this);
+    }
+
+    async getByPath<T>(path: string, suppressLog: boolean = false): Promise<T> {
         const docRef = this.db.doc(path);
         return docRef
             .get()
             .then(getDoc => {
                 if (!getDoc.exists) {
-                    console.log(
-                        `no entry exists at the required path: "${path}"`
-                    );
+                    if (!suppressLog) {
+                        console.log(
+                            `no entry exists at the required path: "${path}"`
+                        );
+                    }
                     return null;
                 } else {
                     return <T>getDoc.data();

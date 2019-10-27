@@ -1,6 +1,6 @@
 import { ProductAndFacilityDataSource } from "./productAndFacilitySpecDataSource";
 import { UserDataSource } from "./userDataSource";
-import { firestoreDbEngine } from "./backEndDataAccess/firestoreDbEngine";
+import { FirestoreDbEngine } from "./backEndDataAccess/firestoreDbEngine";
 
 export enum Database {
     FIRESTORE
@@ -9,13 +9,15 @@ export enum Database {
 export async function getDataSources(
     db: Database
 ): Promise<{
-    productRecipeDataSource: ProductAndFacilityDataSource;
+    productAndFacilityDataSource: ProductAndFacilityDataSource;
     userDataSource: UserDataSource;
 }> {
     // perform db check if different dbs are implemented in the future
-    const dbEngine = new firestoreDbEngine();
+    const dbEngine = await new FirestoreDbEngine().init();
     return {
-        productRecipeDataSource: new ProductAndFacilityDataSource(dbEngine),
+        productAndFacilityDataSource: new ProductAndFacilityDataSource(
+            dbEngine
+        ),
         userDataSource: new UserDataSource(dbEngine)
     };
 }
