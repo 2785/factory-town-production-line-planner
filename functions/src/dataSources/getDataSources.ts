@@ -15,9 +15,9 @@ export async function getDataSources(
     // perform db check if different dbs are implemented in the future
     const dbEngine = await new FirestoreDbEngine().init();
     return {
-        productAndFacilityDataSource: new ProductAndFacilityDataSource(
+        productAndFacilityDataSource: await new ProductAndFacilityDataSource(
             dbEngine
-        ),
+        ).init(),
         userDataSource: new UserDataSource(dbEngine)
     };
 }
