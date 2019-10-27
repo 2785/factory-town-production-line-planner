@@ -6,3 +6,8 @@
 typings/
 
 node_modules/
+
+# local testing
+src/test
+# firebase credentials for local testing
+src/utilities/fbCred.json

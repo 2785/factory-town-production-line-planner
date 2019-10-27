@@ -1,3 +1,7 @@
+# local testing
+
+src/test/
+
 # Logs
 logs
 *.log
