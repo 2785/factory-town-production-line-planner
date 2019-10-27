@@ -67,6 +67,12 @@ export type FacilitySpec = {
   innateBooster?: Maybe<Scalars['Float']>,
 };
 
+export type FacilityWithBooster = {
+   __typename?: 'FacilityWithBooster',
+  facility?: Maybe<Facility>,
+  booster?: Maybe<Scalars['Float']>,
+};
+
 export type FacilityWorkerCount = {
    __typename?: 'FacilityWorkerCount',
   facilityNumber?: Maybe<Scalars['Int']>,
@@ -88,6 +94,9 @@ export type Mutation = {
    __typename?: 'Mutation',
   addProduct: Scalars['Boolean'],
   addSpecialFacility?: Maybe<Scalars['Boolean']>,
+  createUser?: Maybe<UserData>,
+  addFacilityBooster?: Maybe<UserData>,
+  setWorldHappinessBooster?: Maybe<UserData>,
 };
 
 
@@ -105,6 +114,22 @@ export type MutationAddSpecialFacilityArgs = {
   name: Facility,
   workerCap?: Maybe<Scalars['Int']>,
   innateBooster?: Maybe<Scalars['Float']>
+};
+
+
+export type MutationCreateUserArgs = {
+  id?: Maybe<Scalars['String']>
+};
+
+
+export type MutationAddFacilityBoosterArgs = {
+  facility: Facility,
+  booster: Scalars['Float']
+};
+
+
+export type MutationSetWorldHappinessBoosterArgs = {
+  booster: Scalars['Float']
 };
 
 export enum Product {
@@ -251,8 +276,16 @@ export type QueryGetProductionLineArgs = {
 export enum Role {
   Admin = 'ADMIN',
   User = 'USER',
-  Contributor = 'CONTRIBUTOR'
+  Contributor = 'CONTRIBUTOR',
+  Visitor = 'VISITOR'
 }
+
+export type UserData = {
+   __typename?: 'UserData',
+  id: Scalars['String'],
+  worldHappiness: Scalars['Float'],
+  facilityBoosters: Array<Maybe<FacilityWithBooster>>,
+};
 
 
 
@@ -338,6 +371,8 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   IngredientInput: IngredientInput,
+  UserData: ResolverTypeWrapper<UserData>,
+  FacilityWithBooster: ResolverTypeWrapper<FacilityWithBooster>,
   Role: Role,
   ProductSpec: ResolverTypeWrapper<ProductSpec>,
   Ingredient: ResolverTypeWrapper<Ingredient>,
@@ -359,6 +394,8 @@ export type ResolversParentTypes = {
   Mutation: {},
   Boolean: Scalars['Boolean'],
   IngredientInput: IngredientInput,
+  UserData: UserData,
+  FacilityWithBooster: FacilityWithBooster,
   Role: Role,
   ProductSpec: ProductSpec,
   Ingredient: Ingredient,
@@ -371,6 +408,11 @@ export type FacilitySpecResolvers<ContextType = any, ParentType extends Resolver
   name?: Resolver<ResolversTypes['Facility'], ParentType, ContextType>,
   workerCap?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   innateBooster?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>,
+};
+
+export type FacilityWithBoosterResolvers<ContextType = any, ParentType extends ResolversParentTypes['FacilityWithBooster'] = ResolversParentTypes['FacilityWithBooster']> = {
+  facility?: Resolver<Maybe<ResolversTypes['Facility']>, ParentType, ContextType>,
+  booster?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>,
 };
 
 export type FacilityWorkerCountResolvers<ContextType = any, ParentType extends ResolversParentTypes['FacilityWorkerCount'] = ResolversParentTypes['FacilityWorkerCount']> = {
@@ -386,6 +428,9 @@ export type IngredientResolvers<ContextType = any, ParentType extends ResolversP
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addProduct?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationAddProductArgs, 'name' | 'facility' | 'baseProduct' | 'productionCount' | 'productionTime' | 'ingredients'>>,
   addSpecialFacility?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddSpecialFacilityArgs, 'name' | 'workerCap' | 'innateBooster'>>,
+  createUser?: Resolver<Maybe<ResolversTypes['UserData']>, ParentType, ContextType, MutationCreateUserArgs>,
+  addFacilityBooster?: Resolver<Maybe<ResolversTypes['UserData']>, ParentType, ContextType, RequireFields<MutationAddFacilityBoosterArgs, 'facility' | 'booster'>>,
+  setWorldHappinessBooster?: Resolver<Maybe<ResolversTypes['UserData']>, ParentType, ContextType, RequireFields<MutationSetWorldHappinessBoosterArgs, 'booster'>>,
 };
 
 export type ProductionLineResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProductionLineResponse'] = ResolversParentTypes['ProductionLineResponse']> = {
@@ -413,8 +458,15 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getProductionLine?: Resolver<ResolversTypes['ProductionLineResponse'], ParentType, ContextType, QueryGetProductionLineArgs>,
 };
 
+export type UserDataResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserData'] = ResolversParentTypes['UserData']> = {
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  worldHappiness?: Resolver<ResolversTypes['Float'], ParentType, ContextType>,
+  facilityBoosters?: Resolver<Array<Maybe<ResolversTypes['FacilityWithBooster']>>, ParentType, ContextType>,
+};
+
 export type Resolvers<ContextType = any> = {
   FacilitySpec?: FacilitySpecResolvers<ContextType>,
+  FacilityWithBooster?: FacilityWithBoosterResolvers<ContextType>,
   FacilityWorkerCount?: FacilityWorkerCountResolvers<ContextType>,
   Ingredient?: IngredientResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
@@ -422,6 +474,7 @@ export type Resolvers<ContextType = any> = {
   ProductionStep?: ProductionStepResolvers<ContextType>,
   ProductSpec?: ProductSpecResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
+  UserData?: UserDataResolvers<ContextType>,
 };
 
 

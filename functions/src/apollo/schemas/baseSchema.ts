@@ -7,6 +7,7 @@ export const typeDefs = gql`
         ADMIN
         USER
         CONTRIBUTOR
+        VISITOR
     }
 
     schema {
@@ -37,6 +38,22 @@ export const typeDefs = gql`
             workerCap: Int = 5
             innateBooster: Float = 0
         ): Boolean
+        createUser(id: String): UserData
+        addFacilityBooster(facility: Facility!, booster: Float!): UserData
+            @auth(requires: USER)
+        setWorldHappinessBooster(booster: Float!): UserData
+            @auth(requires: USER)
+    }
+
+    type UserData {
+        id: String!
+        worldHappiness: Float!
+        facilityBoosters: [FacilityWithBooster]!
+    }
+
+    type FacilityWithBooster {
+        facility: Facility
+        booster: Float
     }
 
     type ProductSpec {
