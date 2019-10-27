@@ -2,11 +2,12 @@ import { ProductAndFacilityDataSource } from "../../dataSources/productAndFacili
 import { ProductionLineState, FulfillmentState } from "./models/types";
 import { ProductionFacilityFactory } from "./models/productionFacilityFactory";
 import { Product, ProductionStep } from "../../apollo/generated/types";
+import { User } from "../../utilities/user";
 
 export class ProductionLinePlannerService {
     private facilityFactory: ProductionFacilityFactory;
-    constructor(private ds: ProductAndFacilityDataSource) {
-        this.facilityFactory = new ProductionFacilityFactory(ds);
+    constructor(private ds: ProductAndFacilityDataSource, user: User) {
+        this.facilityFactory = new ProductionFacilityFactory(ds, user);
     }
 
     public getProductionLine(
