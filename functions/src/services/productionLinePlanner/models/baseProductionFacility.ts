@@ -11,17 +11,26 @@ export interface ProductionFacility {
     getActualProduction(): number;
 }
 
-export class BaseProductionFacility implements ProductionFacility {
-    private baseProductionSpeed: number;
-    private workerDistribution: number[];
-    private fullCapacity: number;
-    private actualProduction: number;
+export abstract class BaseProductionFacility implements ProductionFacility {
+    protected baseProductionSpeed: number;
+    protected workerDistribution: number[];
+    protected fullCapacity: number;
+    protected actualProduction: number;
+    protected prod: ProductSpec;
+    protected workerCap: number;
+    protected qtyRequired: number;
+    protected happinessBooster: number;
+
     constructor(
-        private workerCap: number,
-        private qtyRequired: number,
-        private prod: ProductSpec,
-        happinessBooster: number = 1.0
+        prod: ProductSpec,
+        workerCap: number,
+        qtyRequired: number,
+        happinessBooster: number
     ) {
+        this.prod = prod;
+        this.workerCap = workerCap;
+        this.qtyRequired = qtyRequired;
+        this.happinessBooster = happinessBooster;
         this.baseProductionSpeed =
             (prod.productionCount / prod.productionTime) * happinessBooster;
         this.fullCapacity = this._getFullCapacity();
@@ -29,9 +38,11 @@ export class BaseProductionFacility implements ProductionFacility {
         this.actualProduction = this._getActualProduction();
     }
 
-    protected _getFullCapacity(): number {
-        return this.baseProductionSpeed * (1.0 + 0.25 * (this.workerCap - 1));
-    }
+    // protected abstract _getBaseProductionSpeed(): number;
+    protected abstract _getFullCapacity(): number;
+    // protected abstract _getFacilityCountAndWorkerDistribution(): number[];
+    protected abstract _getActualProduction(): number;
+    protected abstract _getWorkerCount(remainder: number): number;
 
     protected _getFacilityCountAndWorkerDistribution(): number[] {
         const fullSpeed = this.fullCapacity;
@@ -40,14 +51,7 @@ export class BaseProductionFacility implements ProductionFacility {
         if (remainder == 0) {
             return new Array(fullFacilityCount).fill(this.workerCap);
         } else {
-            let workerCount =
-                remainder > this.baseProductionSpeed
-                    ? Math.ceil(
-                          (remainder - this.baseProductionSpeed) /
-                              this.baseProductionSpeed /
-                              0.25
-                      ) + 1
-                    : 1;
+            let workerCount = this._getWorkerCount(remainder);
             if (workerCount == this.workerCap) {
                 fullFacilityCount += 1;
                 workerCount = 0;
@@ -60,21 +64,6 @@ export class BaseProductionFacility implements ProductionFacility {
                 return workerCountArr;
             }
         }
-    }
-
-    public _getActualProduction(): number {
-        const lastFacilityWorkerCount = this.workerDistribution[
-            this.workerDistribution.length - 1
-        ];
-        const lastFacilityProduction =
-            lastFacilityWorkerCount == this.workerCap
-                ? this.fullCapacity
-                : this.baseProductionSpeed *
-                  (1.0 + 0.25 * (lastFacilityWorkerCount - 1));
-        return (
-            (this.workerDistribution.length - 1) * this.fullCapacity +
-            lastFacilityProduction
-        );
     }
 
     public getProductionStep(): ProductionStep {
