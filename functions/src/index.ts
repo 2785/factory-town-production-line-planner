@@ -16,7 +16,6 @@ const server = generateApolloServer();
 //     console.log(`ready at ${url}`);
 // });
 
-// const PRODUCT_RECIPE_BUCKET = "factory-town-prod-recipe";
 const RECIPE_FILE_NAME = "productRecipe.csv";
 
 export const apolloServer = functions.https.onRequest(
