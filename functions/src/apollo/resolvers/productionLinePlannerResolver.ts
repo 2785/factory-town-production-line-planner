@@ -17,16 +17,9 @@ export const productionLinePlannerResolver: Resolvers = {
                 )
             };
             return Promise.resolve(res);
-        },
-        hello: () => Promise.resolve("Hello!")
+        }
     },
     Mutation: {
-        addProduct: (obj, args, context: ApolloServerContext, info) => {
-            return false;
-        },
-        addSpecialFacility: (obj, args, context: ApolloServerContext, info) => {
-            return Promise.resolve(false);
-        },
         createUser: (obj, args, context: ApolloServerContext, info) => {
             return context.userDataSource.createUser(args.id);
         },

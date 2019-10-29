@@ -75,8 +75,8 @@ export type FacilityWithBooster = {
 
 export type FacilityWorkerCount = {
    __typename?: 'FacilityWorkerCount',
-  facilityNumber?: Maybe<Scalars['Int']>,
-  workerCount?: Maybe<Scalars['Int']>,
+  facilityNumber: Scalars['Int'],
+  workerCount: Scalars['Int'],
 };
 
 export type Ingredient = {
@@ -85,35 +85,12 @@ export type Ingredient = {
   count: Scalars['Float'],
 };
 
-export type IngredientInput = {
-  product: Product,
-  count: Scalars['Float'],
-};
-
 export type Mutation = {
    __typename?: 'Mutation',
-  addProduct: Scalars['Boolean'],
-  addSpecialFacility?: Maybe<Scalars['Boolean']>,
+  hello: Scalars['String'],
   createUser?: Maybe<UserData>,
   addFacilityBooster?: Maybe<UserData>,
   setWorldHappinessBooster?: Maybe<UserData>,
-};
-
-
-export type MutationAddProductArgs = {
-  name: Product,
-  facility: Facility,
-  baseProduct: Scalars['Boolean'],
-  productionCount?: Scalars['Float'],
-  productionTime: Scalars['Float'],
-  ingredients?: Maybe<Array<Maybe<IngredientInput>>>
-};
-
-
-export type MutationAddSpecialFacilityArgs = {
-  name: Facility,
-  workerCap?: Maybe<Scalars['Int']>,
-  innateBooster?: Maybe<Scalars['Float']>
 };
 
 
@@ -369,10 +346,9 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars['Int']>,
   FacilityWorkerCount: ResolverTypeWrapper<FacilityWorkerCount>,
   Mutation: ResolverTypeWrapper<{}>,
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
-  IngredientInput: IngredientInput,
   UserData: ResolverTypeWrapper<UserData>,
   FacilityWithBooster: ResolverTypeWrapper<FacilityWithBooster>,
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   Role: Role,
   ProductSpec: ResolverTypeWrapper<ProductSpec>,
   Ingredient: ResolverTypeWrapper<Ingredient>,
@@ -392,10 +368,9 @@ export type ResolversParentTypes = {
   Int: Scalars['Int'],
   FacilityWorkerCount: FacilityWorkerCount,
   Mutation: {},
-  Boolean: Scalars['Boolean'],
-  IngredientInput: IngredientInput,
   UserData: UserData,
   FacilityWithBooster: FacilityWithBooster,
+  Boolean: Scalars['Boolean'],
   Role: Role,
   ProductSpec: ProductSpec,
   Ingredient: Ingredient,
@@ -416,8 +391,8 @@ export type FacilityWithBoosterResolvers<ContextType = any, ParentType extends R
 };
 
 export type FacilityWorkerCountResolvers<ContextType = any, ParentType extends ResolversParentTypes['FacilityWorkerCount'] = ResolversParentTypes['FacilityWorkerCount']> = {
-  facilityNumber?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  workerCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  facilityNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  workerCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
 };
 
 export type IngredientResolvers<ContextType = any, ParentType extends ResolversParentTypes['Ingredient'] = ResolversParentTypes['Ingredient']> = {
@@ -426,8 +401,7 @@ export type IngredientResolvers<ContextType = any, ParentType extends ResolversP
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  addProduct?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationAddProductArgs, 'name' | 'facility' | 'baseProduct' | 'productionCount' | 'productionTime' | 'ingredients'>>,
-  addSpecialFacility?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddSpecialFacilityArgs, 'name' | 'workerCap' | 'innateBooster'>>,
+  hello?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   createUser?: Resolver<Maybe<ResolversTypes['UserData']>, ParentType, ContextType, MutationCreateUserArgs>,
   addFacilityBooster?: Resolver<Maybe<ResolversTypes['UserData']>, ParentType, ContextType, RequireFields<MutationAddFacilityBoosterArgs, 'facility' | 'booster'>>,
   setWorldHappinessBooster?: Resolver<Maybe<ResolversTypes['UserData']>, ParentType, ContextType, RequireFields<MutationSetWorldHappinessBoosterArgs, 'booster'>>,

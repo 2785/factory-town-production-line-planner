@@ -1,6 +1,5 @@
-import { typeDefs } from "./schemas/baseSchema";
-import { ApolloServer } from "apollo-server-express";
-import { Resolvers, ProductionLineResponse, Role } from "./generated/types";
+import { ApolloServer, makeExecutableSchema } from "apollo-server-express";
+import { Resolvers } from "./generated/types";
 import { AuthDirective } from "./directives/authDirective";
 import * as express from "express";
 import { merge } from "lodash";
@@ -9,14 +8,32 @@ import { getDataSources, Database } from "../dataSources/getDataSources";
 import { ProductAndFacilityDataSource } from "../dataSources/productAndFacilitySpecDataSource";
 import { productionLinePlannerResolver } from "./resolvers/productionLinePlannerResolver";
 import { UserDataSource } from "../dataSources/userDataSource";
+import { baseResolvers } from "./resolvers/baseResolvers";
+import { baseTypeDef } from "./schemas/baseTypeDef";
+import { authTypeDef } from "./schemas/authTypeDef";
+import { productAndFacilityNames } from "./schemas/productAndFacilityNames";
+import {
+    genericTypes,
+    productionLinePlannerTypeDef,
+    userSpecificMutation
+} from "./schemas/productionLinePlannerTypeDef";
 
-const baseResolver: Resolvers = {
-    Query: {
-        hello: () => Promise.resolve("Hello!")
-    }
-};
+const resolvers: Resolvers = merge(
+    baseResolvers,
+    productionLinePlannerResolver
+);
 
-const resolvers: Resolvers = merge(baseResolver, productionLinePlannerResolver);
+const schema = makeExecutableSchema({
+    typeDefs: [
+        baseTypeDef,
+        authTypeDef,
+        productAndFacilityNames,
+        genericTypes,
+        productionLinePlannerTypeDef,
+        userSpecificMutation
+    ],
+    resolvers
+});
 
 export async function generateApolloServer() {
     const app = express();
@@ -27,8 +44,7 @@ export async function generateApolloServer() {
     } = await getDataSources(Database.FIRESTORE);
 
     const server = new ApolloServer({
-        typeDefs,
-        resolvers,
+        schema,
         schemaDirectives: { auth: AuthDirective },
         context: async ({ req }): Promise<ApolloServerContext> => {
             console.log("Generating Context...");
