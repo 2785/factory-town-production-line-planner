@@ -1,11 +1,11 @@
 overwrite: true
-schema: "src/apollo/schemas/baseSchema.ts"
+schema: "src/apollo/schemas/*.ts"
 documents: null
 generates:
-  src/apollo/generated/types.ts:
-    plugins:
-      - "typescript"
-      - "typescript-resolvers"
-  ./graphql.schema.json:
-    plugins:
-      - "introspection"
+    src/apollo/generated/types.ts:
+        plugins:
+            - "typescript"
+            - "typescript-resolvers"
+    ./graphql.schema.json:
+        plugins:
+            - "introspection"
