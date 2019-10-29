@@ -8,13 +8,14 @@ import * as csv from "csvtojson";
 import { Product, Facility, ProductSpec } from "./apollo/generated/types";
 import * as path from "path";
 import * as os from "os";
+import { FirestoreDbEngine } from "./dataSources/backEndDataAccess/firestoreDbEngine";
+import { ProductAndFacilityDataSource } from "./dataSources/productAndFacilitySpecDataSource";
 
 const server = generateApolloServer();
 // server.listen().then(({ url }) => {
 //     console.log(`ready at ${url}`);
 // });
 
-const PRODUCT_RECIPE_BUCKET = "factory-town-prod-recipe";
 const RECIPE_FILE_NAME = "productRecipe.csv";
 
 export const apolloServer = functions.https.onRequest(
@@ -25,7 +26,7 @@ export const apolloServer = functions.https.onRequest(
 );
 
 export const processRecipe = functions.storage
-    .bucket(PRODUCT_RECIPE_BUCKET)
+    .bucket()
     .object()
     .onFinalize(async obj => {
         const tempFilePath = path.join(os.tmpdir(), RECIPE_FILE_NAME);
@@ -33,10 +34,9 @@ export const processRecipe = functions.storage
             return;
         }
         await initializeIfNotAlreadyInitialized();
-        const { productAndFacilityDataSource } = await getDataSources(
-            Database.FIRESTORE
-        );
-        const bucket = admin.storage().bucket(PRODUCT_RECIPE_BUCKET);
+        const dbEngine = await new FirestoreDbEngine().init();
+        const recipeSource = new ProductAndFacilityDataSource(dbEngine);
+        const bucket = admin.storage().bucket();
         await bucket
             .file(RECIPE_FILE_NAME)
             .download({ destination: tempFilePath });
@@ -66,7 +66,7 @@ export const processRecipe = functions.storage
                 }
                 return productSpec;
             });
-        await productAndFacilityDataSource.setProductRecipe(recipes);
+        await recipeSource.setProductRecipe(recipes);
         return;
     });
 
