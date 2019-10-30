@@ -24,7 +24,7 @@ If you are just interested to use the tool to plan your own production line, hea
 
 ![GraphQL Playground Demo UI](imgs\graphqlPlaygroundDemo.png)
 
-Make sure the address bar says `....cloudfunctions.net/apolloServer`. You may have to add the `/apolloServer` part yourself. The following is a sample query you can make to the server.
+Make sure the address bar says `....cloudfunctions.net/apolloServer`. You may have to add the `/apolloServer` part yourself. The following is a sample query you can make to the server. (The project now only has a very limited number of recipes, add more recipes to the [google sheet](https://docs.google.com/spreadsheets/d/1g5lRhYspBwhYlaTPBoqVVNwyvIIkf2bZG6IkMT0YgHg/edit?usp=sharing) if you wish to contribute)
 
 ```gql
 query {
@@ -150,6 +150,40 @@ mutation {
 ```
 
 The happiness booster and facility boosters configured here will be taken into consideration when computing your production lines. Simply invoke the `getProductionLine` query with the HTTP header with your user ID and the query result will be optimized for your world.
+
+### To Play with the Project
+
+You will first need node.js in your system to do anything with this project. If you intend to deploy the project to your own firebase project, you will need to set up firebase as follows:
+
+1. Install firebase tools
+
+    ```bash
+    npm i -g firebase-tools
+    ```
+
+1. Setup and configure your firebase project [here](https://firebase.google.com/). For the project at the moment you will need to enable
+
+    - Firebase Functions
+    - Cloud Firestore
+    - Cloud Storage
+
+1. You will not have access to the original firebase project under the name of `factory-town-prod-line-planner`, you will need to create your own project and point the firebase cli to your own project by running
+
+    ```bash
+    firebase use --add
+    ```
+
+    This command will start a command line dialog to guide you to create an alias for the project that you want it to point to.
+
+1. The functions part of the project lives under the `./functions` folder. `cd` into the folder and run `npm install` to install the dependencies
+
+1. Once you are in the `./functions` folder, you can test the functions locally on Firebase Functions Emulator by running `npm run firebaseServe` or deploy it to your project by running `firebase deploy`
+
+    - You need to have private key file `fbCred.json` for google cloud service account in the folder `./functions/src/utilities` (excuse my naming scheme, the project will attempt to read the file `fbCred.json` if it does not detect a `production` environment. If you wish to change the name of the service account file, you will need to change the file name string in code and update the file name in `.gitignore` to not commit your credentials to public repository). Follow [this instruction](https://firebase.google.com/docs/admin/setup#initialize_the_sdk) to generate the private key file.
+
+1. The GraphQL Api itself will not produce any sensible results just yet as there would be no data in the database. The project has a function trigger on file being added to the cloud storage bucket. It is set to interpret a file named `productRecipe.csv` dropped into the root directory of the storage bucket, parse it, and add the product recipe data to the cloud Firestore. The recipe data in the firestore will be overwritten each time the csv file gets overwritten.
+
+1. Certain facilities in game have higher worker cap than the usual 5. This data should be set up similarly to the product recipes, the logic (function storage trigger and parsing / uploading logic) has not yet been implemented.
 
 ## Design Considerations
 
