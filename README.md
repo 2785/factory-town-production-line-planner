@@ -22,7 +22,7 @@ This project is a tool for the game Factory Town. It is designed to take a desir
 
 If you are just interested to use the tool to plan your own production line, head to this [url](https://us-central1-factory-town-prod-line-planner.cloudfunctions.net/apolloServer) hosted on firebase functions. A user interface similar to the following will show up.
 
-![GraphQL Playground Demo UI](imgs\graphqlPlaygroundDemo.png)
+![GraphQL Playground Demo UI](./imgs/graphqlPlaygroundDemo.png)
 
 Make sure the address bar says `....cloudfunctions.net/apolloServer`. You may have to add the `/apolloServer` part yourself. The following is a sample query you can make to the server. (The project now only has a very limited number of recipes, add more recipes to the [google sheet](https://docs.google.com/spreadsheets/d/1g5lRhYspBwhYlaTPBoqVVNwyvIIkf2bZG6IkMT0YgHg/edit?usp=sharing) if you wish to contribute)
 
