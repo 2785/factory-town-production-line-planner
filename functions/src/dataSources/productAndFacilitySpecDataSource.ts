@@ -5,9 +5,10 @@ import {
     Facility,
     FacilitySpec
 } from "../apollo/generated/types";
+import { STR_CONSTANTS } from "../utilities/stringNamesReference";
 
-const PRODUCT_RECIPE_PATH = "gameData/products";
-const FACILITY_DETAIL_PATH = "gameData/specialFacility";
+const PRODUCT_RECIPE_PATH = STR_CONSTANTS.DB_PATH.PRODUCT_RECIPE_PATH;
+const FACILITY_DETAIL_PATH = STR_CONSTANTS.DB_PATH.FACILITY_DETAIL_PATH;
 
 export class ProductAndFacilityDataSource {
     constructor(private dbEngine: IDatabaseEngine) {}

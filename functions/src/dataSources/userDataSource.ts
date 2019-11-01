@@ -6,9 +6,9 @@ import {
     Facility,
     UserData
 } from "../apollo/generated/types";
-import * as uuid from "uuid/v4";
+import { STR_CONSTANTS } from "../utilities/stringNamesReference";
 
-const DB_USER_DIR_PATH = "userData";
+const DB_USER_DIR_PATH = STR_CONSTANTS.DB_PATH.USER_DIR_PATH;
 const NEW_USER_DEFAULT_ROLE = [Role.User];
 const NO_TOKEN_ROLE = [Role.Visitor];
 
