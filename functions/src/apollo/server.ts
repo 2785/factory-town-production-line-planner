@@ -32,7 +32,10 @@ const schema = makeExecutableSchema({
         productionLinePlannerTypeDef,
         userSpecificMutation
     ],
-    resolvers
+    resolvers,
+    schemaDirectives: {
+        auth: AuthDirective
+    }
 });
 
 export async function generateApolloServer() {
@@ -45,7 +48,6 @@ export async function generateApolloServer() {
 
     const server = new ApolloServer({
         schema,
-        schemaDirectives: { auth: AuthDirective },
         context: async ({ req }): Promise<ApolloServerContext> => {
             console.log("Generating Context...");
             return {
