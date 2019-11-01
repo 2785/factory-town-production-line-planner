@@ -26,8 +26,7 @@
         "fs-extra": "^8.1.0",
         "graphql": "^14.5.8",
         "graphql-tag": "^2.10.1",
-        "lodash": "^4.17.15",
-        "uuid": "^3.3.3"
+        "lodash": "^4.17.15"
     },
     "devDependencies": {
         "@types/fs-extra": "^8.0.1",
