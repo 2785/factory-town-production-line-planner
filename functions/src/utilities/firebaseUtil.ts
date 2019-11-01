@@ -10,7 +10,13 @@ export async function initializeIfNotAlreadyInitialized(): Promise<void> {
         if (process.env.NODE_ENV == "production") {
             admin.initializeApp(functions.config().firebase);
         } else {
-            const config = await fs.readJson(`src/utilities/${configFilePath}`);
+            const fullPath = `src/utilities/${configFilePath}`;
+            if (!fs.ensureFile(fullPath)) {
+                throw new Error(
+                    "Firebase private key file not present. Cannot initialize"
+                );
+            }
+            const config = await fs.readJson(fullPath);
             admin.initializeApp({
                 credential: admin.credential.cert(config),
                 databaseURL: databaseURL
