@@ -4,7 +4,7 @@ import { AuthDirective } from "./directives/authDirective";
 import * as express from "express";
 import { merge } from "lodash";
 import { User } from "../utilities/user";
-import { getDataSources, Database } from "../dataSources/getDataSources";
+import { getFunctionsPackage, Database } from "../dataSources/getFunctionsPkg";
 import { ProductAndFacilityDataSource } from "../dataSources/productAndFacilitySpecDataSource";
 import { productionLinePlannerResolver } from "./resolvers/productionLinePlannerResolver";
 import { UserDataSource } from "../dataSources/userDataSource";
@@ -44,7 +44,7 @@ export async function generateApolloServer() {
     const {
         productAndFacilityDataSource,
         userDataSource
-    } = await getDataSources(Database.FIRESTORE);
+    } = await getFunctionsPackage(Database.FIRESTORE);
 
     const server = new ApolloServer({
         schema,
