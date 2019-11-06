@@ -61,7 +61,6 @@ export const genericTypes = gql`
     type FacilitySpec {
         name: Facility!
         workerCap: Int
-        innateBooster: Float
     }
 
     type Ingredient {

@@ -64,7 +64,6 @@ export type FacilitySpec = {
    __typename?: 'FacilitySpec',
   name: Facility,
   workerCap?: Maybe<Scalars['Int']>,
-  innateBooster?: Maybe<Scalars['Float']>,
 };
 
 export type FacilityWithBooster = {
@@ -382,7 +381,6 @@ export type AuthDirectiveResolver<Result, Parent, ContextType = any, Args = {   
 export type FacilitySpecResolvers<ContextType = any, ParentType extends ResolversParentTypes['FacilitySpec'] = ResolversParentTypes['FacilitySpec']> = {
   name?: Resolver<ResolversTypes['Facility'], ParentType, ContextType>,
   workerCap?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  innateBooster?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>,
 };
 
 export type FacilityWithBoosterResolvers<ContextType = any, ParentType extends ResolversParentTypes['FacilityWithBooster'] = ResolversParentTypes['FacilityWithBooster']> = {
