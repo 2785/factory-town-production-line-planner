@@ -6,12 +6,9 @@ export enum Database {
     FIRESTORE
 }
 
-export async function getDataSources(
-    db: Database
-): Promise<{
-    productAndFacilityDataSource: ProductAndFacilityDataSource;
-    userDataSource: UserDataSource;
-}> {
+export async function getFunctionsPackage(
+    db: Database = Database.FIRESTORE
+): Promise<FunctionsPackage> {
     // perform db check if different dbs are implemented in the future
     const dbEngine = await new FirestoreDbEngine().init();
     const recipeSource = new ProductAndFacilityDataSource(dbEngine);
@@ -28,4 +25,9 @@ export async function getDataSources(
         ).init(),
         userDataSource: new UserDataSource(dbEngine)
     };
+}
+
+interface FunctionsPackage {
+    productAndFacilityDataSource: ProductAndFacilityDataSource;
+    userDataSource: UserDataSource;
 }
