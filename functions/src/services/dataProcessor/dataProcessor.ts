@@ -1,8 +1,4 @@
 import { IDatabaseEngine } from "../../dataSources/backEndDataAccess/iDataBaseEngine";
-import * as path from "path";
-import * as os from "os";
-import { initializeIfNotAlreadyInitialized } from "../../utilities/firebaseUtil";
-import * as admin from "firebase-admin";
 import * as csv from "csvtojson";
 import {
     Product,
@@ -11,9 +7,13 @@ import {
     FacilitySpec
 } from "../../apollo/generated/types";
 import { STR_CONSTANTS } from "../../utilities/stringNamesReference";
+import { IStorageEngine } from "../../dataSources/backEndDataAccess/iStorageEngine";
 
 export class DataProcessor {
-    constructor(private dbEngine: IDatabaseEngine) {}
+    constructor(
+        private dbEngine: IDatabaseEngine,
+        private storageEngine: IStorageEngine
+    ) {}
 
     public upsertProductRecipes(bucketPath: string): Promise<void> {
         return this.insertData(this.processProductRecipe, bucketPath);
@@ -27,24 +27,16 @@ export class DataProcessor {
         fn: (data: T[]) => U[],
         bucketPath: string
     ): Promise<void> {
-        const tmpFilePath = path.join(os.tmpdir(), bucketPath);
-        const bucket = admin.storage().bucket();
-        await bucket.file(bucketPath).download({ destination: tmpFilePath });
-        const prodRecipe = fn(await this.readCsvFile(tmpFilePath));
+        const prodRecipe = fn(
+            await csv().fromString(
+                await this.storageEngine.getFileAsString(bucketPath)
+            )
+        );
         await this.dbEngine.overWriteByPath(
             STR_CONSTANTS.DB_PATH.PRODUCT_RECIPE_PATH,
             prodRecipe
         );
         return;
-    }
-
-    private async readCsvFile<T>(csvFilePath: string): Promise<T[]> {
-        const destination = path.join(os.tmpdir(), csvFilePath);
-        await initializeIfNotAlreadyInitialized();
-        const bucket = admin.storage().bucket();
-        await bucket.file(csvFilePath).download({ destination });
-        const csvFile: T[] = await csv().fromFile(csvFilePath);
-        return csvFile;
     }
 
     private processProductRecipe(
