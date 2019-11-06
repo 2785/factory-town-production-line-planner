@@ -11,7 +11,7 @@ export const STR_CONSTANTS = {
         FIRESTORE_URL: "https://factory-town-prod-line-planner.firebaseio.com"
     },
     STORAGE_PATH: {
-        RECIPE: "gameData/prodRecipe.csv",
+        RECIPE: "gameData/productRecipe.csv",
         FACILITY: "gameData/facilitySpec.csv"
     }
 };
